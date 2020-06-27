@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Link, Route, Redirect } from "react-router-dom";
 import {
+  Container,
   AppBar,
   Toolbar,
   Typography,
@@ -49,7 +50,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div style={{flexGrow: 1, height: "100vh"}}>
+      <Container maxWidth="sm" style={{height: "100vh", margin: "0 auto"}} >
         <Switch>
           <Route exact path="/">
             <Home />
@@ -61,7 +62,7 @@ class App extends React.Component {
             // TO-DO register page
           </Route>
         </Switch>
-      </div>
+      </Container>
     );
   }
 }

@@ -2,40 +2,51 @@ const eventModel = require('../models/Events');
 const bcrypt = require('bcrypt');
 
 exports.create = (req, res, next) => {
-    eventModel.findOne({name: req.body.name}, (err, event) => {
-        if (err) console.log(err);
-        console.log(event)
-        if (event) {
-            return res.status(403).send({
-                error: 'event name taken'
-            })
-        } else {
-            var eventObject = new eventModel({
-                name: req.body.name,
-                owner: req.userData.accountId,
-                managers: req.body.managers,
-                description: req.body.description,
-                email: req.body.email,
-                location: req.body.location
+    eventModel.findOne({
+        name: req.body.name
+    })
+        .exec()
+        .then(event => {
+            if (err) console.log(err);
+            console.log(event)
+            if (event) {
+                return res.status(403).send({
+                    error: 'event name taken'
+                })
+            } else {
+                var eventObject = new eventModel({
+                    name: req.body.name,
+                    owner: req.userData.accountId,
+                    managers: [],
+                    description: req.body.description,
+                    location: req.body.location
+                });
+                eventObject.save().then(eventObj => {
+                    // Add event to database
+                    res.status(201).send({
+                        message: "Event successfully created",
+                        event: eventObj
+                    });
+                }).catch(errrrrrr => {
+                    res.status(500).send({
+                        error: errrrrrr
+                    });
+                })
+            }
+        }).catch(err => {
+            return res.status(500).send({
+                error: err
             });
-            eventObject.save().then(eventObj => { 
-                // Add event to database
-                res.status(201).send({
-                    message: "Event successfully created",
-                    event: eventObj
-                });
-            }).catch(errrrrrr => {
-                res.status(500).send({
-                    error: errrrrrr
-                });
-            })
-        }
-    });
+        });
 }
 
 exports.delete = (req, res, next) => {
-    eventModel.findByIdAndDelete(req.body.eventId, err => {
-        if (err) {
+    eventModel.findByIdAndDelete(req.body.eventId, (err, result) => {
+        if (!result) {
+            res.status(404).send({
+                message: "oops"
+            });
+        } else if (err) {
             console.log(err)
         } else {
             res.status(200).send({
@@ -65,3 +76,12 @@ exports.findEventById = (req, res, next) => {
         }
     })
 }
+
+/**
+ * {
+                "name": "",
+                "managers": req.body.managers,
+                "description": req.body.description,
+                "location": req.body.location
+            }
+ */

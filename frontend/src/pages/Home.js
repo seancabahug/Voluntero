@@ -1,12 +1,28 @@
 import React from 'react';
-import { Paper } from "@material-ui/core";
+import { Paper, Box, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import './Home.css';
 
 export default function Home() {
     return(
-        <div>
-            <Paper style={{width: "70%"}} elevation={3} square>
-                <h1>test</h1>
+        <div className="container">
+            <Paper className="square" elevation={3} square>
+                <div className="content">
+                    <Box display="flex" style={{height: "100%"}} flexDirection="column" alignItems="center" justifyContent="center" className="box">
+                        <h1>Really cool font!</h1>
+                        <div className="buttonContainer">
+                            <Link to="/login">
+                                <Button variant="contained" color="primary">Login</Button>
+                            </Link>
+                            <Link to="/register">
+                                <Button variant="contained" color="primary">Register</Button>
+                            </Link>
+                        </div>
+                    </Box>
+                </div>
             </Paper>
         </div>
     )
 }
+
+//  box
