@@ -11,7 +11,7 @@ const app = express();
 const server = http.Server(app);
 
 // Initializes the port and the url
-const url = `cool url here`;
+const url = process.env.MONGODB_URL;
 const port = 8080;
 
 // Require a custom made logger
@@ -35,7 +35,7 @@ app.use((res, req, next) => {
 
 app.use('/', express.static(__dirname + '/frontend/build'));
 
-mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
 server.listen(port, () => {
     logger.log(`New HTTP server created on port ${port}!`);
