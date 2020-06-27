@@ -14,6 +14,9 @@ const server = http.Server(app);
 const url = `cool url here`;
 const port = 8080;
 
+// Require a custom made logger
+const logger = require('/utilities/Logger.js')
+
 app.use(morgan("dev"));
 app.use(helmet());
 
@@ -30,8 +33,10 @@ app.use((res, req, next) => {
     next();
 });
 
-/* mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true }); */
+app.use('/', express.static(__dirname + '/frontend/build'));
+
+mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 server.listen(port, () => {
-    console.log("Server running on " + port);
+    logger.log(`New HTTP server created on port ${port}!`);
 });
