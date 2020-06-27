@@ -15,6 +15,8 @@ import {
 import { makeStyles }  from "@material-ui/core/styles";
 import APIUtil from "./utils/apiutil";
 import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -56,10 +58,10 @@ class App extends React.Component {
             <Home />
           </Route>
           <Route exact path="/login">
-            // TO-DO login page
+            <Login />
           </Route>
           <Route exact path="/register">
-            // TO-DO register page
+            <Register />
           </Route>
         </Switch>
       </Container>
