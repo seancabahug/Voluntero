@@ -1,14 +1,18 @@
 const Mongoose = require('mongoose');
 
+// mm/dd/yyyy
+// `${mm},${dd},${yyyy}`
 var eventSchema = new Mongoose.Schema({
-    startingDate: {
-        type: Date,
-        required: true
-    },
-    endingDate: {
-        type: Date,
-        required: true
-    },
+    /**
+     *     startingDate: {
+            type: Date,
+            required: true
+        },
+        endingDate: {
+            type: Date,
+            required: true
+        },
+     */
     name: {
         type: String,
         required: true

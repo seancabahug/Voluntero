@@ -33,6 +33,18 @@ exports.create = (req, res, next) => {
     });
 }
 
+exports.delete = (req, res, next) => {
+    eventModel.findByIdAndDelete(req.body.eventId, err => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.status(200).send({
+                message: "Event successfully deleted"
+            });
+        }
+    })
+}
+
 // /events/:eventId - viewing event
 // /events/:eventId/register (authenticated)
 // /events/:eventId/unregister (authenticated)

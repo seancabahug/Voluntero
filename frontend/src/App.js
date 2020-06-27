@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles }  from "@material-ui/core/styles";
 import APIUtil from "./utils/apiutil";
+import Home from './pages/Home';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -48,10 +49,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <div style={{flexGrow: 1}}>
+      <div style={{flexGrow: 1, height: "100vh"}}>
         <Switch>
           <Route exact path="/">
-            // TO-DO Home-page
+            <Home />
           </Route>
           <Route exact path="/login">
             // TO-DO login page
