@@ -7,6 +7,7 @@ const helmet = require('helmet')
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
+// Set up our app
 const app = express();
 const server = http.Server(app);
 
@@ -15,7 +16,7 @@ const url = process.env.MONGODB_URL;
 const port = 8080;
 
 // Require a custom made logger
-const logger = require('/utilities/Logger.js')
+const logger = require('./utilities/Logger.js')
 
 app.use(morgan("dev"));
 app.use(helmet());
@@ -33,10 +34,22 @@ app.use((res, req, next) => {
     next();
 });
 
+/*
+ * Routes
+ */
+
+const apiRoute = require('./routes/api.route');
+
+app.use('/api', apiRoute)
+
 app.use('/', express.static(__dirname + '/frontend/build'));
+
+app.get('/a', (request, response) => {
+    response.sendFile(__dirname + '/requestFile.html');
+})
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
 server.listen(port, () => {
-    logger.log(`New HTTP server created on port ${port}!`);
+    logger.log(`New HTTP server created on localhost:${port}!`);
 });
