@@ -3,7 +3,13 @@ const mongoose = require('mongoose');
 var userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        validate: {
+            validator: v => {
+                return /^[a-zA-Z0-9_-]{3,16}$/.test(v);
+            },
+            message: props => "Username must be alphanumeric and between 3 and 16 characters"
+        }
     },
     password: {
         type: String,

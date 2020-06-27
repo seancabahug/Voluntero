@@ -50,30 +50,36 @@ exports.register = (req, res, next) => {
                 error: 'username taken'
             })
         } else {
-            bcrypt.genSalt(10, function(err, salt) { 
-                // Generate salt
-                bcrypt.hash(req.body.password, salt).then(hash => {
-                    var userObject = new userModel({
-                        username: req.body.username,
-                        password: hash,
-                        email: req.body.email,
-                        location: req.body.location
+            if(req.body.password){
+                bcrypt.genSalt(10, function(err, salt) { 
+                    // Generate salt
+                    bcrypt.hash(req.body.password, salt).then(hash => {
+                        var userObject = new userModel({
+                            username: req.body.username,
+                            password: hash,
+                            email: req.body.email,
+                            location: req.body.location
+                        });
+                        userObject.save().then(userObj => { // Add user to database
+                            res.status(201).send({
+                                message: "User successfully registered",
+                                user: userObj
+                            });
+                        }).catch(errrrrrr => {
+                            res.status(500).send({
+                                error: errrrrrr
+                            });
+                        })
+                    }).catch(err => {
+                        console.error(err);
                     });
-                    userObject.save().then(userObj => { // Add user to database
-                        res.status(201).send({
-                            message: "User successfully registered",
-                            user: userObj
-                        });
-                    }).catch(errrrrrr => {
-                        res.status(500).send({
-                            error: errrrrrr
-                        });
-                    })
-                }).catch(err => {
-                    console.error(err);
+                    
+                })
+            } else {
+                return res.status(400).send({
+                    error: "Password required"
                 });
-                
-            })
+            }
         }
     });
 }

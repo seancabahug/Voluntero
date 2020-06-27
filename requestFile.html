@@ -20,11 +20,53 @@
     <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-    <div
-        style="background: #212121 center; border-radius: 10px; width: 1080px; margin-right: 10em; margin-left: 10em; padding: 30px; height: 50%; color: white">
-        <h1 style="text-align: center;">Request made!</h1>
-        <p style="text-align: center;">You are a gucci banana!</p>
-    </div>
+
+        <style>
+            input[type="date"] {
+                border-radius: 10px;
+                padding: 7px;
+            }
+
+            #container {
+                background-color: #212121;
+                color: white;
+            }
+
+            #sweetFormA {
+                background-color: #212121;
+                border: solid 20px black;
+                border-radius: 10px;
+                color: white;
+                width: 47%;
+                float: left;
+            }
+
+            #sweetFormB {
+                background-color: #212121;
+                border: solid 20px black;
+                border-radius: 10px;
+                color: white;
+                width: 47%;
+                float: right;
+            }
+        </style>
+
+        <div id="container">
+            <form id="sweetFormA" action="/api/users/register" method="post" style="text-align: center;">
+                <h1>Register</h1>
+                <input type="text" name="username" min="3" max="16" placeholder="Username"><br>
+                <input type="password" min="8" max="72" name="password" placeholder="Password"><br>
+                <input type="text" name="email" placeholder="email@mail.com"><br>
+                <input type="text" name="location" placeholder="City"><br>
+                <input type="submit">
+            </form>
+            <form id="sweetFormB" action="/api/users/login" method="post" style="text-align: center;">
+                <h1>Login</h1>
+                <input type="text" name="username" placeholder="Username"><br>
+                <input type="password" name="password" placeholder="Password"><br>
+                <input type="submit">
+            </form>
+        </div>
 
 </body>
 

@@ -44,7 +44,7 @@ app.use('/api', apiRoute)
 
 app.use('/', express.static(__dirname + '/frontend/build'));
 
-app.get('/a', (request, response) => {
+app.get('/dummyRequest', (request, response) => {
     response.sendFile(__dirname + '/requestFile.html');
 })
 

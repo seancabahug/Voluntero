@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Link, Route } from "react-router-dom";
+import { Switch, Link, Route, Redirect } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -11,6 +11,8 @@ import {
   ListItemText,
   Drawer
 } from "@material-ui/core";
+import { makeStyles }  from "@material-ui/core/styles";
+import APIUtil from "./utils/apiutil";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,18 +26,40 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-class App extends React.Component {
-  classes = useStyles();
+function PrivateRoute({children, ...rest}) {
+  return (
+    <Route
+      {...rest}
+      render={
+        ({location}) => APIUtil.authenticated ? children : (
+          <Redirect to={{pathname: "/login", state: {from: location}}} />
+        )
+      }
+    />
+  )
+}
 
-  constructor(props){
+class App extends React.Component {
+
+  constructor(props) {
     super(props);
-    this.state = {authenticated: false};
+    this.state = {drawerOpen: false};
   }
 
   render() {
     return (
-      <div className={classes.root}>
-
+      <div style={{flexGrow: 1}}>
+        <Switch>
+          <Route exact path="/">
+            // TO-DO Home-page
+          </Route>
+          <Route exact path="/login">
+            // TO-DO login page
+          </Route>
+          <Route exact path="/register">
+            // TO-DO register page
+          </Route>
+        </Switch>
       </div>
     );
   }
