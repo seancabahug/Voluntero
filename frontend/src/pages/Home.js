@@ -9,8 +9,7 @@ export default function Home() {
             <Paper className="square" elevation={3} square>
                 <div className="content">
                     <Box display="flex" style={{height: "100%"}} flexDirection="column" alignItems="center" justifyContent="center" className="box">
-                        <h1>Please Login To Continue!</h1>
-                        <h3>Or register if you haven't already!</h3>
+                        <h1>APP NAME</h1>
                         <div className="buttonContainer">
                             <Link to="/login">
                                 <Button variant="contained" color="primary">Login</Button>

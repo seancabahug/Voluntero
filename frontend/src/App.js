@@ -17,6 +17,7 @@ import APIUtil from "./utils/apiutil";
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import MainApp from './pages/MainApp';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,11 +32,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function PrivateRoute({children, ...rest}) {
+  console.log(APIUtil.isAuthenticated());
   return (
     <Route
       {...rest}
       render={
-        ({location}) => APIUtil.authenticated ? children : (
+        ({location}) => APIUtil.isAuthenticated() ? children : (
           <Redirect to={{pathname: "/login", state: {from: location}}} />
         )
       }
@@ -50,21 +52,30 @@ class App extends React.Component {
     this.state = {drawerOpen: false};
   }
 
+  // <Container maxWidth="sm" style={{height: "100vh"}} >
+
   render() {
     return (
-      <Container maxWidth="sm" style={{height: "100vh", margin: "0 auto"}} >
         <Switch>
           <Route exact path="/">
-            <Home />
+            <Container maxWidth="sm" style={{height: "100vh"}} >
+              <Home />
+            </Container>
           </Route>
           <Route exact path="/login">
-            <Login />
+            <Container maxWidth="sm" style={{height: "100vh"}} >
+              <Login />
+            </Container>
           </Route>
           <Route exact path="/register">
-            <Register />
+            <Container maxWidth="sm" style={{height: "100vh"}} >
+              <Register />
+            </Container>
           </Route>
+          <PrivateRoute path="/app">
+            <MainApp />
+          </PrivateRoute>
         </Switch>
-      </Container>
     );
   }
 }

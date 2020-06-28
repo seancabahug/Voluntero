@@ -12,7 +12,7 @@ exports.login = (req, res, next) => {
         .then(identification => {
             if (!identification) {
                 return res.status(401).send({
-                    error: "Auth failed"
+                    error: "Authentication failed. (ERR:01)"
                 })
             } else {
                 bcrypt.compare(req.body.password, identification.password, function(err, result) {
@@ -24,7 +24,7 @@ exports.login = (req, res, next) => {
                         })
                     } else {
                         return res.status(401).send({
-                            error: "Auth failed"
+                            error: "Authentication failed. (ERR:02)"
                         })
                     }
                 });
@@ -32,7 +32,7 @@ exports.login = (req, res, next) => {
         });
     } else {
         return res.status(401).send({
-            error: "Auth failed"
+            error: "Authentication failed. (ERR:03)"
         })
     }
 }
@@ -40,14 +40,14 @@ exports.login = (req, res, next) => {
 exports.register = (req, res, next) => {
     if (!notAllowedUserNames.indexOf(req.body.username) < 0) {
         return res.status(401).send({
-            error: "Auth failed"
+            error: "Authentication failed. (ERR:03)"
         })
     }
     userModel.findOne({username: req.body.username}, (err, user) => {
         if (err) console.log(err);
         if (user) {
             return res.status(403).send({
-                error: 'username taken'
+                error: 'Sorry, that username is in use!'
             })
         } else {
             if(req.body.password){
@@ -62,7 +62,7 @@ exports.register = (req, res, next) => {
                         });
                         userObject.save().then(userObj => { // Add user to database
                             res.status(201).send({
-                                message: "User successfully registered",
+                                message: "User successfully registered!",
                                 user: userObj
                             });
                         }).catch(errrrrrr => {
@@ -77,7 +77,7 @@ exports.register = (req, res, next) => {
                 })
             } else {
                 return res.status(400).send({
-                    error: "Password required"
+                    error: "Oops, you password field is blank!"
                 });
             }
         }

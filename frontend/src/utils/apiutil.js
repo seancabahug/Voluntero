@@ -1,8 +1,10 @@
+var authenticated = false;
+var token = null;
+
 const APIUtil = {
-    authenticated: false,
-    token: null,
+    isAuthenticated: () => authenticated,
     authenticate(data, cb) {
-        fetch("http://localhost:8080/api/users/login", {
+        fetch("/api/users/login", {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -15,21 +17,21 @@ const APIUtil = {
                 case 500: // Invalid/Auth failed
                 case 403:
                 case 401:
-                    cb(0, {error: data.error});
+                    cb(0, data.error.message || ((data.error.toString() == "[object Object]") ? JSON.stringify(data.error) : data.error));
                     break;
                 case 201: // Authenticated!
+                    token = data.token;
+                    authenticated = true;
                     cb(1);
-                    this.token = data.token;
-                    this.authenticated = true;
                     break;
                 default:
-                    cb(2); // Something went wrong
+                    cb(0); // Something went wrong
                     break;
             }
         });
     },
     registerUser(data, cb) {
-        fetch("http://localhost:8080/api/users/register", {
+        fetch("/api/users/register", {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -43,7 +45,7 @@ const APIUtil = {
                 case 403:
                 case 401:
                 case 400:
-                    cb(0, data.error);
+                    cb(0, data.error.message || ((data.error.toString() == "[object Object]") ? JSON.stringify(data.error) : data.error));
                     break;
                 case 201: 
                     cb(1);

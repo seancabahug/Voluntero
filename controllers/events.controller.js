@@ -11,7 +11,7 @@ exports.create = (req, res, next) => {
             console.log(event)
             if (event) {
                 return res.status(403).send({
-                    error: 'event name taken'
+                    error: 'Sorry, that event name is in use. Maybe you already made it?'
                 })
             } else {
                 var eventObject = new eventModel({
@@ -24,7 +24,7 @@ exports.create = (req, res, next) => {
                 eventObject.save().then(eventObj => {
                     // Add event to database
                     res.status(201).send({
-                        message: "Event successfully created",
+                        message: "Successfully created an event!",
                         event: eventObj
                     });
                 }).catch(errrrrrr => {
@@ -44,13 +44,13 @@ exports.delete = (req, res, next) => {
     eventModel.findByIdAndDelete(req.body.eventId, (err, result) => {
         if (!result) {
             res.status(404).send({
-                message: "oops"
+                message: "Event not found."
             });
         } else if (err) {
             console.log(err)
         } else {
             res.status(200).send({
-                message: "Event successfully deleted"
+                message: "Event successfully deleted!"
             });
         }
     })

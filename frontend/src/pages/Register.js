@@ -1,17 +1,35 @@
 import React from 'react';
-import { Paper, Box, Button, TextField, Form} from "@material-ui/core";
+import { Paper, Box, Button, TextField, Form, Snackbar } from "@material-ui/core";
+import { Alert } from '@material-ui/lab';
 import { Link } from "react-router-dom";
 import './Register.css';
+import { useHistory } from 'react-router-dom';
 import APIUtils from '../utils/apiutil';
 
 export default function Register() {
+    let history = useHistory();
+
     const [usernameValue, setUsernameValue] = React.useState("");
     const [passwordValue, setPasswordValue] = React.useState("");
     const [emailValue, setEmailValue] = React.useState("");
     const [locationValue, setLocationValue] = React.useState("");
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState("");
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway'){
+            return;
+        }
+        setSnackbarOpen(false);
+    };
 
     return(
         <div className="container">
+            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    Error! {errorMessage}
+                </Alert>
+            </Snackbar>
             <Paper className="square" elevation={3} square>
                 <div className="content">
                     <Box display="flex" style={{height: "100%"}} flexDirection="column" alignItems="center" justifyContent="center" className="box">
@@ -28,10 +46,12 @@ export default function Register() {
                                     password: passwordValue,
                                     email: emailValue,
                                     location: locationValue
-                                }, status => {
-                                    switch(status){
-                                        case 0:
-                                            break;
+                                }, (status, error="") => {
+                                    if (status) {
+                                        history.push('/login');
+                                    } else {
+                                        setErrorMessage(error)
+                                        setSnackbarOpen(true);
                                     }
                                 });
                             }}>Register</Button>
@@ -43,4 +63,3 @@ export default function Register() {
     )
 }
 
-//  box
