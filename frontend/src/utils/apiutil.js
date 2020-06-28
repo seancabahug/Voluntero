@@ -2,9 +2,6 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-var authenticated = false;
-var token = null;
-
 const APIUtil = {
     isAuthenticated: () => typeof(cookies.get('token')) != "undefined",
     authenticate(data, cb) {
@@ -29,7 +26,7 @@ const APIUtil = {
                     cb(1);
                     break;
                 default:
-                    cb(0); // Something went wrong
+                    cb(0, "Something went wrong while contacting the server!"); // Something went wrong
                     break;
             }
         });
@@ -59,6 +56,10 @@ const APIUtil = {
                     break;
             }
         });
+    },
+    logout(cb) {
+        cookies.remove('token');
+        cb();
     }
 };
 

@@ -77,7 +77,7 @@ exports.register = (req, res, next) => {
                 })
             } else {
                 return res.status(400).send({
-                    error: "Oops, you password field is blank!"
+                    error: "Oops, your password field is blank!"
                 });
             }
         }
