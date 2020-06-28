@@ -1,8 +1,12 @@
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+
 var authenticated = false;
 var token = null;
 
 const APIUtil = {
-    isAuthenticated: () => authenticated,
+    isAuthenticated: () => typeof(cookies.get('token')) != "undefined",
     authenticate(data, cb) {
         fetch("/api/users/login", {
             method: 'POST',
@@ -20,8 +24,8 @@ const APIUtil = {
                     cb(0, data.error.message || ((data.error.toString() == "[object Object]") ? JSON.stringify(data.error) : data.error));
                     break;
                 case 201: // Authenticated!
-                    token = data.token;
-                    authenticated = true;
+                    const onehrdate = () => {var n = new Date(); n.setTime(n.getTime + (60*60*1000)); return n};
+                    cookies.set('token', data.token, { path: '/', expires: onehrdate()}); // Token will expire in 1 hour
                     cb(1);
                     break;
                 default:
