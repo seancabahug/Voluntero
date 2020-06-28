@@ -60,6 +60,30 @@ const APIUtil = {
     logout(cb) {
         cookies.remove('token');
         cb();
+    },
+    getSelfInfo(cb){
+        fetch("/api/users/me", {
+            headers: {
+                Authorization: "Bearer " + cookies.get('token')
+            }
+        })
+        .then(async res => {
+            switch(res.status){
+                case 500: // Invalid/Auth failed
+                case 403:
+                case 401:
+                case 400:
+                    cb(0, data.error.message || ((data.error.toString() == "[object Object]") ? JSON.stringify(data.error) : data.error));
+                    break;
+                case 201:
+                    var data = await res.json();
+                    cb(1, data);
+                    break;
+                default:
+                    cb(0, "Something went wrong while contacting the server!"); // Something went wrong
+                    break;
+            }
+        });
     }
 };
 

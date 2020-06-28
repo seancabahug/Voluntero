@@ -11,6 +11,10 @@ var userSchema = new mongoose.Schema({
             message: props => "Username must be alphanumeric and between 3 and 16 characters"
         }
     },
+    currency: {
+        type: Number,
+        required: true
+    },
     password: {
         type: String,
         required: true
@@ -29,6 +33,10 @@ var userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    registeredEvents: [{
+        type: String,
+        required: true
+    }]
 });
 
 module.exports = new mongoose.model('Users', userSchema);

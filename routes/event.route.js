@@ -4,6 +4,15 @@ const auth = require('../middleware/auth');
 const eventController = require('../controllers/events.controller');
 
 router.post('/create', auth, eventController.create);
+router.post('/all', auth, eventController.listEvents);
 router.get('/:eventId', eventController.findEventById);
+router.post('/:eventId/register', auth, eventController.register);
+router.post('/:eventId/unregister', auth, eventController.unregister);
+router.post('/:eventId/confirm/you\'reGay', auth, eventController.confirmPoints); // Make sure that req.userData.accountId == event.owner
+// body: 
+// "volunteer": userId of person
+// then, add event.reward to user.currency
+
+
 
 module.exports = router;

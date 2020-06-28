@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function PrivateRoute({children, ...rest}) {
+function AuthenticatedRoute({children, ...rest}) {
   console.log(APIUtil.isAuthenticated());
   return (
     <Route
@@ -39,6 +39,20 @@ function PrivateRoute({children, ...rest}) {
       render={
         ({location}) => APIUtil.isAuthenticated() ? children : (
           <Redirect to={{pathname: "/login", state: {from: location}}} />
+        )
+      }
+    />
+  )
+}
+
+function UnauthenticatedRoute({children, ...rest}) {
+  console.log(APIUtil.isAuthenticated());
+  return (
+    <Route
+      {...rest}
+      render={
+        ({location}) => !APIUtil.isAuthenticated() ? children : (
+          <Redirect to={{pathname: "/app", state: {from: location}}} />
         )
       }
     />
@@ -57,24 +71,24 @@ class App extends React.Component {
   render() {
     return (
         <Switch>
-          <Route exact path="/">
+          <UnauthenticatedRoute exact path="/">
             <Container maxWidth="sm" style={{height: "100vh"}} >
               <Home />
             </Container>
-          </Route>
-          <Route exact path="/login">
+          </UnauthenticatedRoute>
+          <UnauthenticatedRoute exact path="/login">
             <Container maxWidth="sm" style={{height: "100vh"}} >
               <Login />
             </Container>
-          </Route>
-          <Route exact path="/register">
+          </UnauthenticatedRoute>
+          <UnauthenticatedRoute exact path="/register">
             <Container maxWidth="sm" style={{height: "100vh"}} >
               <Register />
             </Container>
-          </Route>
-          <PrivateRoute path="/app">
+          </UnauthenticatedRoute>
+          <AuthenticatedRoute path="/app">
             <MainApp />
-          </PrivateRoute>
+          </AuthenticatedRoute>
         </Switch>
     );
   }

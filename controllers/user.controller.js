@@ -58,7 +58,8 @@ exports.register = (req, res, next) => {
                             username: req.body.username,
                             password: hash,
                             email: req.body.email,
-                            location: req.body.location
+                            location: req.body.location,
+                            currency: 0
                         });
                         userObject.save().then(userObj => { // Add user to database
                             res.status(201).send({
@@ -82,4 +83,22 @@ exports.register = (req, res, next) => {
             }
         }
     });
+}
+
+exports.getSelfInfo = (req, res, next) => {
+    userModel.findById(req.userData.accountId)
+        .then(user => {
+            if (user) {
+                return res.status(201).send(user);
+            } else {
+                return res.status(404).send({
+                    error: "Something's definitely broken, contact sysadmins"
+                })
+            }
+        })
+        .catch(err => {
+            return res.status(500).send({
+                error: err
+            });
+        });
 }

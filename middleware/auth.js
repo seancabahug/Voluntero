@@ -10,17 +10,17 @@ module.exports = (req, res, next) => {
                 next();
             } catch (err) {
                 return res.status(401).json({
-                    message: "Auth failed",
+                    error: "Auth failed",
                 });
             }
         } else { // Authorization header did not start with "Bearer "
             return res.status(401).json({
-                message: "Auth failed",
+                error: "Auth failed",
             });
         }
     } else {
         return res.status(401).json({
-            message: "Auth failed",
+            error: "Auth failed",
         });
     }
 };

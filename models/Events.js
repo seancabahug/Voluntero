@@ -23,14 +23,17 @@ var eventSchema = new Mongoose.Schema({
             message: props => "Event name is invalid"
         }
     },
+
     owner: {
         type: String,
         required: true
     },
+
     managers: [{ // Should be an array of user IDs
         type: String,
         required: true 
     }],
+
     description: {
         type: String,
         required: true,
@@ -41,14 +44,27 @@ var eventSchema = new Mongoose.Schema({
             message: props => "Event description is invalid"
         }
     },
-    location: [{ // ['city', 'state', 'country']
-        type: String,
-        required: true
+
+    location: [{ 
+        type: Number,
+        required: true,
+        validate: {
+            validator: v => {
+                return v.toString().replaceAll(".", "").length <= 7
+            },
+            message: props => "Invalid location"
+        }
     }],
+
     participants: [{ // Should be an array of user IDs
         type: String,
         required: true
-    }]
+    }],
+
+    reward: {
+        type: String,
+        required: true
+    }
 })
 
 module.exports = new Mongoose.model('Events', eventSchema);

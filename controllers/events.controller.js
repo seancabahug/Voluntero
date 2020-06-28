@@ -3,11 +3,10 @@ const bcrypt = require('bcrypt');
 
 exports.create = (req, res, next) => {
     eventModel.findOne({
-        name: req.body.name
-    })
+            name: req.body.name
+        })
         .exec()
         .then(event => {
-            if (err) console.log(err);
             console.log(event)
             if (event) {
                 return res.status(403).send({
@@ -17,9 +16,10 @@ exports.create = (req, res, next) => {
                 var eventObject = new eventModel({
                     name: req.body.name,
                     owner: req.userData.accountId,
-                    managers: [],
+                    managers: [req.userData.accountId],
                     description: req.body.description,
-                    location: req.body.location
+                    location: req.body.location,
+                    reward: parseInt(req.body.reward)
                 });
                 eventObject.save().then(eventObj => {
                     // Add event to database
@@ -27,15 +27,16 @@ exports.create = (req, res, next) => {
                         message: "Successfully created an event!",
                         event: eventObj
                     });
-                }).catch(errrrrrr => {
+                }).catch(err => {
                     res.status(500).send({
-                        error: errrrrrr
+                        error: err
                     });
                 })
             }
-        }).catch(err => {
+        }).catch(error => {
+            console.log(error);
             return res.status(500).send({
-                error: err
+                error: error
             });
         });
 }
@@ -61,13 +62,14 @@ exports.delete = (req, res, next) => {
 // /events/:eventId/unregister (authenticated)
 // DELETE /events/:eventId - delete event (authenticated)
 
+
 exports.findEventById = (req, res, next) => {
-    eventModel.findById(req.params.eventId, (err, found) => {
+    eventModel.findById(req.params.eventId, (err, event) => {
         if (err) console.log(err);
         if (event) {
             return res.status(200).send({
                 message: 'Event found!',
-                data: found
+                data: event
             })
         } else {
             return res.status(403).send({
@@ -75,6 +77,91 @@ exports.findEventById = (req, res, next) => {
             })
         }
     })
+};
+
+exports.register = (req, res, next) => {
+    eventModel.findById(req.params.eventId, (err, event) => {
+        if (err) console.log(err);
+        if (event) {
+            if(event.participants.indexOf(req.userData.accountId) < 0) {
+                event.participants.push(req.userData.accountId);
+                event.save().then(() => {
+                    return res.status(200).send({
+                        message: 'Successfully registered!',
+                        data: event
+                    })
+                }).catch(err => {                
+                    return res.status(500).send({
+                        error: err
+                    })
+                });
+            } else {
+                return res.status(403).send({
+                    error: "You are already registered for this event."
+                });
+            }
+        } else {
+            return res.status(403).send({
+                error: 'Event not found!'
+            });
+        }
+    })
+}
+
+exports.unregister = (req, res, next) => {
+    eventModel.findById(req.params.eventId, (err, event) => {
+        if (err) console.log(err);
+        if (event) {
+            if (event.participants.indexOf(req.userData.accountId) >= 0){
+                event.participants.splice(event.participants.indexOf(req.params.eventId), 1);
+                event.save().then(() => {
+                    return res.status(200).send({
+                        message: 'Successfully unregistered!',
+                        data: event
+                    });
+                })
+                .catch(err => {
+                    return res.status(500).send({
+                        error: err
+                    });
+                })
+            } else {
+                return res.status(403).send({
+                    message: "You are not registered to this event."
+                });
+            }
+        } else {
+            return res.status(403).send({
+                error: 'Event not found!'
+            })
+        }
+    })
+}
+
+exports.listEvents = (req, res, next) => {
+    eventModel.find({}, (err, result) => {
+        return res.status(200).send({
+            message: 'Found all events!',
+            data: result
+        });
+    }).catch((err) => {
+        return res.status(500).send({
+            error: err
+        });
+    })
+}
+
+exports.confirmPoints = (req, res, next) => {
+    eventModel.findById(req.params.eventId)
+        .exec()
+        .then(event => {
+            if(req.userData.accountId == event.owner) {
+                
+            }
+        })
+        .catch(err => {
+
+        })    
 }
 
 /**

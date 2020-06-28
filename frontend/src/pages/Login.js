@@ -13,6 +13,7 @@ export default function Login() {
     const [passwordValue, setPasswordValue] = React.useState("");
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState("");
+    const [loginButtonText, setLoginButtonText] = React.useState("Log In");
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway'){
@@ -37,6 +38,7 @@ export default function Login() {
                             <TextField placeholder="Password" type="password" onChange={event => setPasswordValue(event.target.value)} />
                             <br/>
                             <Button variant="contained" color="primary" onClick={() => {
+                                setLoginButtonText("Logging in...");
                                 APIUtil.authenticate({
                                     username: usernameValue,
                                     password: passwordValue
@@ -44,11 +46,12 @@ export default function Login() {
                                     if (status) {
                                         history.push("/app");
                                     } else {
+                                        setLoginButtonText("Log In");
                                         setErrorMessage(error);
                                         setSnackbarOpen(true);
                                     }
                                 })
-                            }}>Login</Button>
+                            }}>{loginButtonText}</Button>
                         </div>
                     </Box>
                 </div>
