@@ -84,9 +84,15 @@ class EventList extends React.Component {
                                   </CardContent>
                                   <CardActions>
                                         <Button size="small" onClick={() => {
-                                            APIUtil.registerEvent(() => {
-                                                window.location.reload();
-                                            }, event._id)
+                                            if(!this.state.registeredFor.includes(event._id)){
+                                                APIUtil.registerEvent(() => {
+                                                    window.location.reload();
+                                                }, event._id)
+                                            } else {
+                                                APIUtil.unRegisterEvent(() => {
+                                                    window.location.reload();
+                                                }, event._id)
+                                            }
                                         }}>{this.state.registeredFor.includes(event._id) ? "Unregister" : "Register"}</Button>
                                   </CardActions>
                               </Card>

@@ -89,7 +89,17 @@ const APIUtil = {
         }, error => {
             cb(0, [{name: "Couldn't find events"}]);
         });
-    }
+    },
+    unRegisterEvent(cb, eventId) {
+        sendReq("/api/events/" + eventId + "/unregister", {
+            method: 'POST',
+            headers: {"Authorization": "Bearer " + cookies.get('token')}
+        }, data => {
+            cb(1, data);
+        }, error => {
+            cb(0, [{name: "Couldn't find events"}]);
+        });
+    },
 };
 
 export default APIUtil;
