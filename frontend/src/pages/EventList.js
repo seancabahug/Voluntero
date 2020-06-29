@@ -10,7 +10,7 @@ import {
     Grid,
 } from "@material-ui/core";
 
-export default class EventList extends React.Component {
+class EventList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -84,7 +84,9 @@ export default class EventList extends React.Component {
                                   </CardContent>
                                   <CardActions>
                                         <Button size="small" onClick={() => {
-                                            APIUtil.registerEvent()
+                                            APIUtil.registerEvent(() => {
+                                                window.location.reload();
+                                            }, event._id)
                                         }}>{this.state.registeredFor.includes(event._id) ? "Unregister" : "Register"}</Button>
                                   </CardActions>
                               </Card>
@@ -95,3 +97,5 @@ export default class EventList extends React.Component {
         );
     }
 }
+
+export default EventList;
