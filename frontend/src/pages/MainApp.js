@@ -77,7 +77,7 @@ class MainApp extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        Volunteery!
+                        Voluntero
                         </Typography>
                         <Button onClick={() => {
                             APIUtil.logout(() => {
