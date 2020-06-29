@@ -60,6 +60,6 @@ app.get('/dummyRequest', (request, response) => {
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
-server.listen(port, () => {
+server.listen(process.env.PORT || port, () => {
     logger.log(`New HTTP server created on localhost:${port}!`);
 });
