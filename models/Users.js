@@ -29,10 +29,6 @@ var userSchema = new mongoose.Schema({
             message: props => `${props.value} is not a valid email address!`
         }
     },
-    location: {
-        type: String,
-        required: true
-    },
     registeredEvents: [{
         type: String,
         required: true

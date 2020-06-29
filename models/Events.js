@@ -50,7 +50,12 @@ var eventSchema = new Mongoose.Schema({
         required: true,
         validate: {
             validator: v => {
-                return v.toString().replaceAll(".", "").length <= 7
+                for(i in v) {
+                    if (v.toString().replaceAll(".", "").length <= 7) {
+                        return false;
+                    }
+                }
+                return true;
             },
             message: props => "Invalid location"
         }
@@ -62,8 +67,13 @@ var eventSchema = new Mongoose.Schema({
     }],
 
     reward: {
-        type: String,
+        type: Number,
         required: true
+    },
+
+    imageUrl: {
+        type: String,
+        required: false
     }
 })
 

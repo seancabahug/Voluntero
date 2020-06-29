@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import './Register.css';
 import { useHistory } from 'react-router-dom';
 import APIUtils from '../utils/apiutil';
-
+ 
 export default function Register() {
     let history = useHistory();
 
@@ -38,14 +38,12 @@ export default function Register() {
                             <TextField placeholder="Username" onChange={event => setUsernameValue(event.target.value)} />
                             <TextField placeholder="Password" type="password" onChange={event => setPasswordValue(event.target.value)} />
                             <TextField placeholder="Email" onChange={event => setEmailValue(event.target.value)} />
-                            <TextField placeholder="Location" onChange={event => setLocationValue(event.target.value)} />
                             <br/>
                             <Button variant="contained" color="primary" onClick={() => {
                                 APIUtils.registerUser({
                                     username: usernameValue,
                                     password: passwordValue,
-                                    email: emailValue,
-                                    location: locationValue
+                                    email: emailValue
                                 }, (status, error="") => {
                                     if (status) {
                                         history.push('/login');

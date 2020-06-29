@@ -11,6 +11,7 @@ import {
     Typography,
     Button
 } from "@material-ui/core";
+import CropFreeIcon from "@material-ui/icons/CropFree";
 import MenuIcon from "@material-ui/icons/Menu";
 import FaceIcon from "@material-ui/icons/Face";
 import EventIcon from "@material-ui/icons/Event";
@@ -18,9 +19,10 @@ import MapIcon from "@material-ui/icons/Map";
 import Cookies from 'universal-cookie';
 import APIUtil from '../utils/apiutil';
 import { Switch, Route } from 'react-router';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import EventMap from './EventMap';
 import EventList from './EventList';
+import MyQRCode from './QRCode';
 
 class MainApp extends React.Component {
     constructor(props){
@@ -44,18 +46,24 @@ class MainApp extends React.Component {
                         onKeyDown={() => {this.setState({drawerOpen: false})}}
                     >
                         <List>
-                            <ListItem button key="Map">
-                                <ListItemIcon><MapIcon /></ListItemIcon>
-                                <ListItemText primary="Map" />
-                            </ListItem>
-                            <ListItem button key="Events">
-                                <ListItemIcon><EventIcon /></ListItemIcon>
-                                <ListItemText primary="Events" />
-                            </ListItem>
-                            <ListItem button key="You">
-                                <ListItemIcon><FaceIcon /></ListItemIcon>
-                                <ListItemText primary="You" />
-                            </ListItem>
+                            <Link to={`${this.props.match.url}/`}>
+                                <ListItem button key="Map">
+                                    <ListItemIcon><MapIcon /></ListItemIcon>
+                                    <ListItemText primary="Map" />
+                                </ListItem>
+                            </Link>
+                            <Link to={`${this.props.match.url}/events`}>
+                                <ListItem button key="Events">
+                                    <ListItemIcon><EventIcon /></ListItemIcon>
+                                    <ListItemText primary="Events" />
+                                </ListItem>
+                            </Link>
+                            <Link to={`${this.props.match.url}/qr`}>
+                                <ListItem button key="My QR Code">
+                                    <ListItemIcon><CropFreeIcon /></ListItemIcon>
+                                    <ListItemText primary="My QR Code" />
+                                </ListItem>
+                            </Link>
                         </List>
                     </div>
                 </Drawer>
@@ -69,7 +77,7 @@ class MainApp extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" style={{ flexGrow: 1 }}>
-                            Volunteer
+                        Volunteery!
                         </Typography>
                         <Button onClick={() => {
                             APIUtil.logout(() => {
@@ -81,10 +89,12 @@ class MainApp extends React.Component {
                 <Switch>
                     <Route exact path={this.props.match.path}>
                         <EventMap />
-                        {/* <EventList /> */}
                     </Route>
                     <Route path={`${this.props.match.path}/events`}>
-                        // TO-DO events
+                        <EventList />
+                    </Route>
+                    <Route path={`${this.props.match.path}/qr`}>
+                        <MyQRCode />
                     </Route>
                 </Switch>
             </div>

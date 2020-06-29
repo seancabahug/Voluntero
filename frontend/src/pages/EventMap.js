@@ -9,6 +9,14 @@ import {
 } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import APIUtil from '../utils/apiutil';
+
+// uh, when can you speak?
+// like 
+// i asked that a long time ago lol, i was in the middle of it then you switched tabs and i auto-followed you
+// coincidence i checked on vsc the same time you respond
+// uhh idk, i'll unmute when the house gets louder but holy fuck it's dead silent
+// this is big brain time
 
 export default class EventMap extends React.Component {
     constructor(props) {
@@ -16,7 +24,8 @@ export default class EventMap extends React.Component {
         this.state = {
             lat: 39.8283,
             lng: 98.5795,
-            zoom: 10
+            zoom: 10,
+            events: []
         }
     }
 
@@ -30,12 +39,15 @@ export default class EventMap extends React.Component {
         }).catch(() => {
             this.setState({lat: 39.8283, lng: 98.5795, zoom: 3}); // Geographic center of the United States, in case your mom messes things up. :D
         });*/
+        APIUtil.getAllEvents((status, data) => {
+            console.log(data)
+            this.setState(() => {return {events: data.data}})
+            console.log(this.state.events)
+        });
         if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(position => {
-                this.setState({lat: position.coords.latitude, lng: position.coords.longitude});
+            navigator.geolocation.getCurrentPosition(pos => {
+                this.setState({lat: pos.coords.latitude, lng: pos.coords.longitude});
             });
-        } else {
-            this.setState({lat: 39.8283, lng: 98.5795, zoom: 5}); // Geographic center of the United States
         }
     }
 
@@ -45,11 +57,15 @@ export default class EventMap extends React.Component {
             <div style={{height: "100%"}}>
                 <Map center={position} zoom={this.state.zoom} style={{width: "100%", height: "100%"}}>
                     <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' url='https://{s}.tile.osm.org/{z}/{x}/{y}.png' />
-                    <Marker position={position}>
-                        <Popup>
-                            yeaaaaahhhhhhh
-                        </Popup>
-                    </Marker>
+                    {this.state.events ? (
+                        this.state.events.map(event => (
+                            <Marker position={event.location} icon={L.icon({iconUrl: "/marker.webp", iconSize: [50, 50], iconAnchor: [25, 50]})}>
+                                <Popup>{event.name}</Popup>
+                            </Marker>
+                        ))
+                    ) : (
+                        ""
+                    )}
                 </Map>
             </div>
         );

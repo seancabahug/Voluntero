@@ -1,4 +1,5 @@
 const eventModel = require('../models/Events');
+const userModel = require('../models/Users');
 const bcrypt = require('bcrypt');
 
 exports.create = (req, res, next) => {
@@ -19,7 +20,8 @@ exports.create = (req, res, next) => {
                     managers: [req.userData.accountId],
                     description: req.body.description,
                     location: req.body.location,
-                    reward: parseInt(req.body.reward)
+                    reward: parseInt(req.body.reward),
+                    imageUrl: req.body.imageUrl
                 });
                 eventObject.save().then(eventObj => {
                     // Add event to database
@@ -86,6 +88,12 @@ exports.register = (req, res, next) => {
             if(event.participants.indexOf(req.userData.accountId) < 0) {
                 event.participants.push(req.userData.accountId);
                 event.save().then(() => {
+                    userModel.findById(req.userData.accountId)
+                        .exec()
+                        .then(user => {
+                            user.registeredEvents.push(event._id);
+                            user.save();
+                        });
                     return res.status(200).send({
                         message: 'Successfully registered!',
                         data: event
@@ -143,7 +151,7 @@ exports.listEvents = (req, res, next) => {
         return res.status(200).send({
             message: 'Found all events!',
             data: result
-        });
+        })
     }).catch((err) => {
         return res.status(500).send({
             error: err
@@ -153,14 +161,27 @@ exports.listEvents = (req, res, next) => {
 
 exports.confirmPoints = (req, res, next) => {
     eventModel.findById(req.params.eventId)
-        .exec()
+        .exec() // yessir
         .then(event => {
             if(req.userData.accountId == event.owner) {
-                
+                userModel.findById(req.params.recipientId)
+                    .exec()
+                    .then(user => {
+                        user.currency += event.reward
+                        user.save().then(user => {
+                            return res.status(200).send({
+                                message
+                                : 'Added your fucking currency, happy?',
+                                data: user.currency
+                            });
+                        });
+                    })
             }
         })
         .catch(err => {
-
+            return res.status(500).send({
+                error: err
+            });
         })    
 }
 
