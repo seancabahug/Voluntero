@@ -28,7 +28,7 @@
     "helmet": "^3.23.3",
     "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.9.20",
     "morgan": "^1.10.0",
     "react-router": "^5.2.0"
